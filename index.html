@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>AM CONTROL CENTER TECNICA5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<!-- SPLASH SCREEN -->
+<div class="splash" id="splash">
+  <div class="splash-logo">
+    <div class="splash-icon-wrap">
+      <i class="ti ti-building-community"></i>
+    </div>
+    <div class="splash-title">AM CONTROL CENTER</div>
+    <div class="splash-sub">TECNICA5</div>
+    <div class="splash-bar"><div class="splash-fill"></div></div>
+  </div>
+</div>
+
+<div class="app" id="app" style="opacity:0">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-left">
+        <div class="logo">
+          <div class="logo-mark">
+            <i class="ti ti-building-community"></i>
+          </div>
+          <div class="logo-text">
+            <span class="logo-name">AM CONTROL CENTER</span>
+            <span class="logo-brand">TECNICA5</span>
+          </div>
+        </div>
+        <div class="sub" id="topbar-sub">Gestión de personal</div>
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" onclick="showNotifs()">
+          <i class="ti ti-bell"></i>
+          <span class="notif-badge" id="notif-badge" style="display:none"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCROLL AREA -->
+  <div class="scroll-area">
+
+    <!-- ══ DASHBOARD ══ -->
+    <div class="page active" id="page-home">
+      <div class="hero">
+        <div class="hero-bg-orb orb1"></div>
+        <div class="hero-bg-orb orb2"></div>
+        <div class="hero-bg-orb orb3"></div>
+        <div class="hero-date" id="hero-date"></div>
+        <div class="hero-title">Buen día 👋</div>
+        <div class="hero-sub">Prosecretaría · AM CONTROL CENTER</div>
+        <div class="hero-stats" id="hero-stats"></div>
+      </div>
+      <div class="page-pad">
+        <div id="alertas"></div>
+        <div class="sec-label">Acciones rápidas</div>
+        <div class="quick-grid">
+          <div class="quick-btn qb-green" onclick="abrirSheet('sheet-asistencia')">
+            <div class="quick-icon"><i class="ti ti-clock-check"></i></div>
+            <span>Asistencia</span>
+          </div>
+          <div class="quick-btn qb-red" onclick="abrirSheet('sheet-falta')">
+            <div class="quick-icon"><i class="ti ti-calendar-x"></i></div>
+            <span>Falta</span>
+          </div>
+          <div class="quick-btn qb-amber" onclick="abrirSheet('sheet-licencia')">
+            <div class="quick-icon"><i class="ti ti-file-certificate"></i></div>
+            <span>Licencia</span>
+          </div>
+          <div class="quick-btn qb-blue" onclick="abrirSheet('sheet-suplencia')">
+            <div class="quick-icon"><i class="ti ti-user-check"></i></div>
+            <span>Suplencia</span>
+          </div>
+        </div>
+        <div class="sec-label">Novedades de hoy</div>
+        <div class="card" id="novedades-card">
+          <div id="novedades-list"></div>
+        </div>
+        <div class="sec-label">Últimos movimientos</div>
+        <div class="card">
+          <div id="movs-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ DOCENTES ══ -->
+    <div class="page" id="page-docentes">
+      <div class="page-pad">
+        <div class="search-bar">
+          <i class="ti ti-search"></i>
+          <input type="text" placeholder="Buscar docente…" oninput="filtrarDoc(this.value)" id="search-doc">
+        </div>
+        <div class="chips" id="chips-turno">
+          <div class="chip active" onclick="filtroTurno('')">Todos</div>
+          <div class="chip" onclick="filtroTurno('Mañana')">Mañana</div>
+          <div class="chip" onclick="filtroTurno('Tarde')">Tarde</div>
+          <div class="chip" onclick="filtroTurno('Vespertino')">Vespertino</div>
+        </div>
+        <div id="lista-docentes"></div>
+      </div>
+    </div>
+
+    <!-- ══ NOVEDADES ══ -->
+    <div class="page" id="page-novedades">
+      <div class="page-pad">
+        <div class="tab-bar">
+          <div class="tab active" onclick="switchTab('tab-faltas',this)">Faltas</div>
+          <div class="tab" onclick="switchTab('tab-licencias',this)">Licencias</div>
+          <div class="tab" onclick="switchTab('tab-suplencias',this)">Suplencias</div>
+        </div>
+        <div id="tab-faltas">
+          <div class="chips">
+            <div class="chip active" onclick="filtroFalta('')">Todas</div>
+            <div class="chip" onclick="filtroFalta('Injustificada')">Injustificada</div>
+            <div class="chip" onclick="filtroFalta('Justificada')">Justificada</div>
+            <div class="chip" onclick="filtroFalta('Tardanza')">Tardanza</div>
+          </div>
+          <div id="lista-faltas"></div>
+        </div>
+        <div id="tab-licencias" style="display:none">
+          <div id="lista-licencias"></div>
+        </div>
+        <div id="tab-suplencias" style="display:none">
+          <div id="lista-suplencias"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ASISTENCIA ══ -->
+    <div class="page" id="page-asistencia">
+      <div class="page-pad">
+        <input type="date" class="finput" id="filtro-fecha"
+          style="margin-bottom:14px" onchange="renderAsistencia()">
+        <div id="lista-asistencia"></div>
+      </div>
+    </div>
+
+    <!-- ══ REPORTES ══ -->
+    <div class="page" id="page-reportes">
+      <div class="page-pad">
+        <div class="stats-row" id="rep-stats"></div>
+        <div class="sec-label">Faltas por docente</div>
+        <div class="card">
+          <div id="rep-faltas"></div>
+        </div>
+        <div class="sec-label">Licencias activas</div>
+        <div class="card">
+          <div id="rep-licencias"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /scroll-area -->
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-tab active" onclick="navTo('home',this)">
+      <i class="ti ti-home"></i><span>Inicio</span>
+    </button>
+    <button class="nav-tab" onclick="navTo('docentes',this)">
+      <i class="ti ti-users"></i><span>Docentes</span>
+    </button>
+    <button class="nav-tab" onclick="navTo('novedades',this)">
+      <i class="ti ti-calendar-event"></i><span>Novedades</span>
+    </button>
+    <button class="nav-tab" onclick="navTo('asistencia',this)">
+      <i class="ti ti-clock-check"></i><span>Asistencia</span>
+    </button>
+    <button class="nav-tab" onclick="navTo('reportes',this)">
+      <i class="ti ti-chart-bar"></i><span>Informes</span>
+    </button>
+  </nav>
+
+</div><!-- /app -->
+
+<!-- FAB -->
+<button class="fab" id="fab" onclick="fabAction()">
+  <i class="ti ti-plus"></i>
+</button>
+
+<!-- TOAST -->
+<div id="toast"><i class="ti ti-check"></i><span id="toast-msg"></span></div>
+
+<!-- SHEET: Nuevo/Editar docente -->
+<div class="sheet-overlay" id="sheet-docente">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-title" id="sheet-doc-title">Nuevo docente</div>
+      <button class="sheet-close" onclick="cerrarSheet('sheet-docente')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="sheet-body">
+      <div class="frow">
+        <div class="fgroup">
+          <label class="flabel">Apellido</label>
+          <input class="finput" id="d-ap" placeholder="García">
+        </div>
+        <div class="fgroup">
+          <label class="flabel">Nombre</label>
+          <input class="finput" id="d-nom" placeholder="María">
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fgroup">
+          <label class="flabel">Legajo</label>
+          <input class="finput" id="d-leg" placeholder="D-001">
+        </div>
+        <div class="fgroup">
+          <label class="flabel">Turno</label>
+          <select class="finput" id="d-turno">
+            <option>Mañana</option><option>Tarde</option><option>Vespertino</option>
+          </select>
+        </div>
+      </div>
+      <div class="fgroup">
+        <label class="flabel">Materia / Área</label>
+        <input class="finput" id="d-mat" placeholder="Matemática">
+      </div>
+      <div class="fgroup">
+        <label class="flabel">Teléfono</label>
+        <input class="finput" id="d-tel" placeholder="011-1234-5678" type="tel">
+      </div>
+    </div>
+    <div class="sheet-footer">
+      <div class="btn-row">
+        <button class="btn-full btn-ghost" onclick="cerrarSheet('sheet-docente')">Cancelar</button>
+        <button class="btn-full btn-primary" onclick="guardarDocente()">
+          <i class="ti ti-check"></i> Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SHEET: Asistencia -->
+<div class="sheet-overlay" id="sheet-asistencia">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-title">Registrar asistencia</div>
+      <button class="sheet-close" onclick="cerrarSheet('sheet-asistencia')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="sheet-body">
+      <div class="fgroup">
+        <label class="flabel">Docente</label>
+        <select class="finput" id="a-doc"></select>
+      </div>
+      <div class="frow">
+        <div class="fgroup">
+          <label class="flabel">Fecha</label>
+          <input class="finput" type="date" id="a-fecha">
+        </div>
+        <div class="fgroup">
+          <label class="flabel">Hora entrada</label>
+          <input class="finput" type="time" id="a-hora">
+        </div>
+      </div>
+      <div class="fgroup">
+        <label class="flabel">Estado</label>
+        <select class="finput" id="a-estado">
+          <option>Presente</option><option>Tardanza</option><option>Ausente</option>
+        </select>
+      </div>
+      <div class="fgroup">
+        <label class="flabel">Observación</label>
+        <input class="finput" id="a-obs" placeholder="Opcional…">
+      </div>
+    </div>
+    <div class="sheet-footer">
+      <div class="btn-row">
+        <button class="btn-full btn-ghost" onclick="cerrarSheet('sheet-asistencia')">Cancelar</button>
+        <button class="btn-full btn-primary" onclick="guardarAsistencia()">
+          <i class="ti ti-check"></i> Registrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SHEET: Falta -->
+<div class="sheet-overlay" id="sheet-falta">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-title">Registrar falta</div>
+      <button class="sheet-close" onclick="cerrarSheet('sheet-falta')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="sheet-body">
+      <div class="fgroup">
+        <label class="flabel">Docente</label>
+        <select class="finput" id="f-doc"></select>
+      </div>
+      <div class="frow">
+        <div class="fgroup">
+          <label class="flabel">Fecha</label>
+          <input class="finput" type="date" id="f-fecha">
+        </div>
+        <div class="fgroup">
+          <label class="flabel">Tipo</label>
+          <select class="finput" id="f-tipo">
+            <option>Injustificada</option><option>Justificada</option><option>Tardanza</option>
+          </select>
+        </div>
+      </div>
+      <div class="fgroup">
+        <label class="flabel">Motivo</label>
+        <textarea class="finput" id="f-mot" placeholder="Descripción…"></textarea>
+      </div>
+      <div class="fgroup">
+        <label class="flabel">¿Cubierta?</label>
+        <select class="finput" id="f-cub">
+          <option value="No">No (sin cubrir)</option>
+          <option value="Sí">Sí</option>
+          <option value="Parcial">Parcialmente</option>
+        </select>
+      </div>
+    </div>
+    <div class="sheet-footer">
+      <div class="btn-row">
+        <button class="btn-full btn-ghost" onclick="cerrarSheet('sheet-falta')">Cancelar</button>
+        <button class="btn-full btn-primary" onclick="guardarFalta()">
+          <i class="ti ti-check"></i> Registrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SHEET: Licencia -->
+<div class="sheet-overlay" id="sheet-licencia">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-title">Registrar licencia</div>
+      <button class="sheet-close" onclick="cerrarSheet('sheet-licencia')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="sheet-body">
+      <div class="fgroup">
+        <label class="flabel">Docente</label>
+        <select class="finput" id="l-doc"></select>
+      </div>
+      <div class="fgroup">
+        <label class="flabel">Tipo de licencia</label>
+        <select class="finput" id="l-tipo">
+          <option>Enfermedad</option>
+          <option>Maternidad / Paternidad</option>
+          <option>Estudio / Capacitación</option>
+          <option>Familiar a cargo</option>
+          <option>Gremial</option>
+          <option>Sin goce de haberes</option>
+          <option>Otra</option>
+        </select>
+      </div>
+      <div class="frow">
+        <div class="fgroup">
+          <label class="flabel">Desde</label>
+          <input class="finput" type="date" id="l-desde">
+        </div>
+        <div class="fgroup">
+          <label class="flabel">Hasta</label>
+          <input class="finput" type="date" id="l-hasta">
+        </div>
+      </div>
+      <div class="fgroup">
+        <label class="flabel">Observaciones</label>
+        <textarea class="finput" id="l-obs" placeholder="Detalles…"></textarea>
+      </div>
+    </div>
+    <div class="sheet-footer">
+      <div class="btn-row">
+        <button class="btn-full btn-ghost" onclick="cerrarSheet('sheet-licencia')">Cancelar</button>
+        <button class="btn-full btn-primary" onclick="guardarLicencia()">
+          <i class="ti ti-check"></i> Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SHEET: Suplencia -->
+<div class="sheet-overlay" id="sheet-suplencia">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-title">Asignar suplencia</div>
+      <button class="sheet-close" onclick="cerrarSheet('sheet-suplencia')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="sheet-body">
+      <div class="fgroup">
+        <label class="flabel">Docente titular</label>
+        <select class="finput" id="s-tit"></select>
+      </div>
+      <div class="fgroup">
+        <label class="flabel">Docente suplente</label>
+        <input class="finput" id="s-sup" placeholder="Apellido y nombre">
+      </div>
+      <div class="frow">
+        <div class="fgroup">
+          <label class="flabel">Desde</label>
+          <input class="finput" type="date" id="s-desde">
+        </div>
+        <div class="fgroup">
+          <label class="flabel">Hasta</label>
+          <input class="finput" type="date" id="s-hasta">
+        </div>
+      </div>
+      <div class="fgroup">
+        <label class="flabel">Motivo</label>
+        <select class="finput" id="s-mot">
+          <option>Falta injustificada</option>
+          <option>Licencia médica</option>
+          <option>Licencia por maternidad</option>
+          <option>Licencia de estudio</option>
+          <option>Otra</option>
+        </select>
+      </div>
+    </div>
+    <div class="sheet-footer">
+      <div class="btn-row">
+        <button class="btn-full btn-ghost" onclick="cerrarSheet('sheet-suplencia')">Cancelar</button>
+        <button class="btn-full btn-primary" onclick="guardarSuplencia()">
+          <i class="ti ti-check"></i> Asignar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="logica.js"></script>
+<script>
+  // Splash screen
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      const splash = document.getElementById('splash');
+      const app = document.getElementById('app');
+      splash.classList.add('splash-out');
+      app.style.transition = 'opacity 0.5s ease';
+      app.style.opacity = '1';
+      setTimeout(() => splash.remove(), 600);
+    }, 1800);
+  });
+</script>
+</body>
+</html>
